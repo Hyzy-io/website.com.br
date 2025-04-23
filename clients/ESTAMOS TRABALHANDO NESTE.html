@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>FOSSIO FORCE - FRAMEWORK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+:root {
+  --transition-speed: 0.3s;
+  --border-radius: 8px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tema Escuro */
+body {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-tertiary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --accent: #64b5f6;
+  --border: #333333;
+}
+
+/* Tema Claro */
+body.light {
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e0e0e0;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --accent: #1976d2;
+  --border: #e0e0e0;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--transition-speed);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header label {
+  color: var(--text-secondary);
+}
+
+header select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  min-width: 160px;
+  max-width: 260px;
+  width: 100%;
+}
+
+#toggle-theme {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 220px;
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.tabs button {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.tabs button:hover {
+  background: var(--accent);
+  color: #000;
+}
+
+.tab-content {
+  display: none;
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  background: var(--bg-tertiary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+iframe.tab-content {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tab-content {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  max-height: 100%;
+}
+
+#code,
+#design,
+#logica {
+  overflow: auto;
+  max-height: 100%;
+  white-space: pre;
+}
+
+</style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <label for="app-select">App:</label>
+      <select id="app-select"></select>
+
+      <label for="version-select">Versão:</label>
+      <select id="version-select"></select>
+    </div>
+    <button id="toggle-theme">🌙</button>
+  </header>
+
+  <main class="container">
+    <aside class="sidebar">
+      <h2><i class="fas fa-code-branch"></i> Versões</h2>
+      <ul id="version-list"></ul>
+    </aside>
+    <section class="content">
+      <div class="tabs">
+        <button data-target="code">HTML</button>
+        <button data-target="design">CSS</button>
+        <button data-target="logica">JS</button>
+        <button data-target="preview">Preview</button>
+      </div>
+
+      <div id="code" class="tab-content"></div>
+      <div id="design" class="tab-content"></div>
+      <div id="logica" class="tab-content"></div>
+      <iframe id="preview" class="tab-content"></iframe>
+    </section>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://ttculypdvkyivkzxalry.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0Y3VseXBkdmt5aXZrenhhbHJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NzE2MDcsImV4cCI6MjA1NzQ0NzYwN30.9FK-l24dj1l43_UbeSWSlCrPi-oN4SLmNFJMntWUmLA'
+    );
+
+    const appSelect = document.getElementById('app-select');
+    const versionSelect = document.getElementById('version-select');
+    let versoesPorApp = {};
+
+    async function carregarApps() {
+      const { data: apps } = await supabase.from('apps').select('*').eq('deletado', false);
+      if (!apps || !apps.length) return;
+
+      appSelect.innerHTML = '<option disabled selected>Selecione um app</option>';
+      apps.forEach(app => {
+        const option = document.createElement('option');
+        option.value = app.id;
+        option.textContent = app.nome;
+        appSelect.appendChild(option);
+      });
+    }
+
+    async function carregarVersoes(appsId) {
+      const { data: versoes } = await supabase
+        .from('versoes')
+        .select('id, nome, code, design, logica')
+        .eq('apps_id', appsId)
+        .eq('deletado', false)
+        .order('criado_em', { ascending: false });
+
+      if (!versoes || !versoes.length) return;
+
+      versoesPorApp[appsId] = versoes;
+      versionSelect.innerHTML = '<option disabled selected>Selecione uma versão</option>';
+      versoes.forEach(v => {
+        const option = document.createElement('option');
+        option.value = v.id;
+        option.textContent = v.nome;
+        versionSelect.appendChild(option);
+      });
+    }
+
+    function carregarConteudoPorId(appsId, versaoId) {
+      const versao = versoesPorApp[appsId]?.find(v => v.id === versaoId);
+      if (!versao) return;
+
+      const code = document.getElementById('code');
+      const design = document.getElementById('design');
+      const logica = document.getElementById('logica');
+
+      if (code) code.textContent = versao.code || '';
+      if (design) design.textContent = versao.design || '';
+      if (logica) logica.textContent = versao.logica || '';
+
+      const iframe = document.getElementById('preview');
+      if (iframe) {
+        iframe.srcdoc = `
+          <!DOCTYPE html>
+          <html lang="pt-br">
+            <head>
+              <style>${versao.design || ''}</style>
+
+            </head>
+            <body>
+              ${versao.code || ''}
+              <script>${versao.logica || ''}<\/script>
+            </body>
+          </html>`;
+      }
+
+      // Exibe automaticamente a aba "Preview"
+      document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+      document.getElementById('preview').style.display = 'block';
+
+    }
+
+    appSelect.addEventListener('change', e => {
+      carregarVersoes(e.target.value);
+    });
+
+    versionSelect.addEventListener('change', e => {
+      const appsId = appSelect.value;
+      const versaoId = e.target.value;
+      carregarConteudoPorId(appsId, versaoId);
+    });
+
+    document.querySelectorAll('.tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+        document.getElementById(btn.dataset.target).style.display = 'block';
+      });
+    });
+
+    function aplicarTemaInicial() {
+      const temaSalvo = localStorage.getItem('tema') || 'dark';
+      document.body.classList.toggle('light', temaSalvo === 'light');
+      document.getElementById('toggle-theme').textContent = temaSalvo === 'light' ? '☀️' : '🌙';
+    }
+
+    document.getElementById('toggle-theme').addEventListener('click', () => {
+      const body = document.body;
+      const lightMode = body.classList.toggle('light');
+      localStorage.setItem('tema', lightMode ? 'light' : 'dark');
+      document.getElementById('toggle-theme').textContent = lightMode ? '☀️' : '🌙';
+    });
+
+    aplicarTemaInicial();
+    carregarApps();
+  </script>
+</body>
+</html>
