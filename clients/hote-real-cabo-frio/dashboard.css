@@ -1,0 +1,106 @@
+/* Only styles for the dashboard cards section */
+.software-cards {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 18px;
+  min-width: 320px;
+  max-width: 370px;
+  border: 1.5px solid var(--border-card);
+  box-shadow: 0 2px 16px 0 #00101913;
+  padding: 2rem 1.5rem 1.6rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: background var(--transition), box-shadow var(--transition);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--card-icon-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.orange-bg {
+  background: linear-gradient(135deg, #F77028, #ffb68b 85%);
+  box-shadow: 0 2px 12px 0 #F7702833;
+}
+
+.blue-bg {
+  background: linear-gradient(135deg, #3072ff 0%, #47adff 100%);
+  box-shadow: 0 2px 12px 0 #3072ff33;
+}
+
+.purple-bg {
+  background: linear-gradient(135deg, #7a31be 0%, #b887f8 100%);
+  box-shadow: 0 2px 12px 0 #7a31be33;
+}
+
+.card h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.28em;
+  color: var(--title);
+  font-family: 'Orbitron', 'Rajdhani', Arial, sans-serif;
+  letter-spacing: .07em;
+  font-weight: 700;
+}
+
+.card p {
+  font-size: 1.07em;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 2rem 0;
+  font-family: 'Inter', 'Sora', 'Poppins', Arial, sans-serif;
+  font-weight: 400;
+}
+
+.card-btn {
+  margin-top: auto;
+  background: var(--btn-bg);
+  color: #fff;
+  font-family: 'Inter', 'Sora', 'Poppins', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.08em;
+  border: none;
+  border-radius: 8px;
+  padding: .9em 2.3em;
+  cursor: pointer;
+  transition: background .17s, box-shadow .17s, color .15s;
+  box-shadow: 0 2px 8px 0 #F7702831;
+  min-width: 0;
+}
+
+.card-btn:hover,
+.card-btn:focus {
+  background: var(--btn-hover);
+  color: #FFF;
+}
+
+@media (max-width: 900px) {
+  .software-cards {
+    flex-direction: column;
+    gap: 1.4rem;
+    align-items: center;
+    margin-top: 2.6rem;
+    width: 100%;
+  }
+
+  .card {
+    max-width: 400px;
+    width: 98vw;
+    min-width: 0;
+    padding: 1.2rem .5rem 1.2rem .5rem;
+  }
+}
+
