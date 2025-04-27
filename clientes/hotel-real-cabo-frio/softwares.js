@@ -1,8 +1,10 @@
 // --------- Software SideMenu Logic ---------
 const CLIENTE_SOFTWARES = [
-  {name: "APP Fidelidade", icon: "#4A90E2", id: "sw1", url: "https://fossio-ftg-mck.github.io/hotel-real/"},
-  {name: "APP Onboard", icon: "#F77028", id: "sw2", url: "https://fossio-ftg-mck.github.io/hotel-real/onboard"},
-  {name: "Central Técnica", icon: "#7a31be", id: "sw3", url: "https://fossio-ftg-mck.github.io/hotel-real/central-tecnica"},
+  {name: "APP Fidelidade", icon: "#4A90E2", id: "sw1", url: "https://Hyzy-io.github.io/hotel-real/"},
+  {name: "APP Onboard", icon: "#F77028", id: "sw2", url: "https://Hyzy-io.github.io/hotel-real/onboard"},
+  {name: "Checkout Infinitepay", icon: "#7a31be", id: "sw3", url: "https://Hyzy-io.github.io/hotel-real/utilitarios/checkout-infinitepay.html"},
+  {name: "Webhook reservas", icon: "#F77028", id: "sw4", url: "https://Hyzy-io.github.io/hotel-real/utilitarios/webhook-reservas-lista.html"},
+  {name: "Central Técnica", icon: "#7a31be", id: "sw5", url: "https://Hyzy-io.github.io/hotel-real/utilitarios/central-tecnica"},
 ];
 
 const softwaresOverlay = document.getElementById('softwaresOverlay');
